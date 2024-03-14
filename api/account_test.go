@@ -24,7 +24,7 @@ func TestGetAccountAPI(t *testing.T) {
 	user, _ := randomUser(t) 
 	account := randomAccount(user.Username)
 
-	testCases := []struct {
+	testCases := []struct { 
 		name          string
 		accountID     int64
 		setupAuth     func(t *testing.T, request *http.Request, tokenMaker token.Maker)
