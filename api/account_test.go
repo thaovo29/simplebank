@@ -21,7 +21,7 @@ import (
 )
 
 func TestGetAccountAPI(t *testing.T) {
-	user, _ := randomUser(t)
+	user, _ := randomUser(t) 
 	account := randomAccount(user.Username)
 
 	testCases := []struct {
