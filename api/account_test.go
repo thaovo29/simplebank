@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"io/ioutil" 
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"testing"
