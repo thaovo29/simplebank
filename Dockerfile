@@ -1,8 +1,8 @@
 # Build stage
-FROM --platform=linux/amd64/v8 golang:1.22-alpine3.19 AS builder
+FROM golang:1.22-alpine3.19 AS builder
 WORKDIR /app
 COPY . .
-RUN go build -o main main.go
+RUN env GOOS=linux GOARCH=arm64 go build -o main main.go
 RUN apk add curl
 RUN curl -L https://github.com/golang-migrate/migrate/releases/download/v4.17.0/migrate.linux-amd64.tar.gz | tar xvz
 
