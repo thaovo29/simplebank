@@ -14,6 +14,12 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v3
 
+    - name: Install Kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'v1.29.3'
+      id: install
+
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -33,6 +39,11 @@ jobs:
         REPOSITORY: simplebank
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
-        docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+        docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -t lastest .
+        docker push -a $REGISTRY/$REPOSITORY
+    - name: Deploy image to aws EKS
+      run: |
+        kubectl apply -f eks/aws-auth.yaml
+        kubectl apply -f eks/deployment.yaml 
+        kubectl apply -f eks/service.yaml
         
