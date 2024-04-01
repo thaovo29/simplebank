@@ -25,7 +25,7 @@ func (server *Server) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest)
 	}
 
 	if authPayload.Username != req.GetUsername() {
-		return nil, status.Errorf(codes.PermissionDenied, "cannot update other user's ingo")
+		return nil, status.Errorf(codes.PermissionDenied, "cannot update other user's info")
 	}
 
 	arg := db.UpdateUserParams{
