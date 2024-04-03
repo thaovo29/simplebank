@@ -44,15 +44,15 @@ func (processor *RedisTaskProccessor) ProcessTaskSendVerifynEmail(ctx context.Co
 
 	user, err := processor.store.GetUser(ctx, payload.Username)
 	if err != nil {
-		// if err == sql.ErrNoRows {
+		// if  errors.Is(err, db.ErrRecordNotFound) {
 		// 	return fmt.Errorf("user doesn't exist: %w", asynq.SkipRetry)
 		// }
 		return fmt.Errorf("fail to get user: %w", err)
 	}
 
 	verifyEmail, err := processor.store.CreateVerifyEmail(ctx, db.CreateVerifyEmailParams{
-		Username: user.Username,
-		Email: user.Email,
+		Username:   user.Username,
+		Email:      user.Email,
 		SecretCode: util.RandomString(32),
 	})
 
@@ -67,7 +67,7 @@ func (processor *RedisTaskProccessor) ProcessTaskSendVerifynEmail(ctx context.Co
 		Please <a href="%s">Click here</a> to vrify email <br/>
 	`, user.FullName, verifyURL)
 
-	to := []string {user.Email}
+	to := []string{user.Email}
 	err = processor.mailer.SendEmail(subject, content, to, nil, nil, nil)
 	if err != nil {
 		return fmt.Errorf("fail to send verify email")

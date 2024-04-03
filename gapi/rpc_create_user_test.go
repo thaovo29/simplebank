@@ -25,7 +25,7 @@ import (
 type eqCreateUserTxParamsMatcher struct {
 	arg      db.CreateUserTxParams
 	password string
-	user db.User
+	user     db.User
 }
 
 func (expected eqCreateUserTxParamsMatcher) Matches(x interface{}) bool {
@@ -39,7 +39,7 @@ func (expected eqCreateUserTxParamsMatcher) Matches(x interface{}) bool {
 	}
 
 	expected.arg.HashedPassword = actualArg.HashedPassword
-	if !reflect.DeepEqual(expected.arg.CreateUserParams, actualArg.CreateUserParams){
+	if !reflect.DeepEqual(expected.arg.CreateUserParams, actualArg.CreateUserParams) {
 		return false
 	}
 
@@ -62,7 +62,7 @@ func TestCreateUserAPI(t *testing.T) {
 	testCases := []struct {
 		name          string
 		req           *pb.CreateUserRequest
-		buildStubs    func(store *mockdb.MockStore, taskDistributor *mockwk.MockTaskDistributor) 
+		buildStubs    func(store *mockdb.MockStore, taskDistributor *mockwk.MockTaskDistributor)
 		checkResponse func(t *testing.T, res *pb.CreateUserResponse, err error)
 	}{
 		{
@@ -160,6 +160,7 @@ func randomUser(t *testing.T) (user db.User, password string) {
 	require.NoError(t, err)
 	user = db.User{
 		Username:       util.RandomOwner(),
+		Role:           util.DepositorRole,
 		HashedPassword: hashedPassword,
 		FullName:       util.RandomOwner(),
 		Email:          util.RandomEmail(),

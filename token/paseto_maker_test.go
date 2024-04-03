@@ -14,10 +14,11 @@ func TestPasetoMaker(t *testing.T) {
 
 	username := util.RandomOwner()
 	duration := time.Minute
+	role := util.DepositorRole
 	issuedAt := time.Now()
 	expiredAt := issuedAt.Add(duration)
 
-	token, payload, err := maker.CreateToken(username, duration)
+	token, payload, err := maker.CreateToken(username, role,  duration)
 	require.NoError(t, err)
 	require.NotEmpty(t, token)
 	require.NotEmpty(t, payload)
@@ -28,6 +29,7 @@ func TestPasetoMaker(t *testing.T) {
 
 	require.NotZero(t, payload.ID)
 	require.Equal(t, payload.Username, username)
+	require.Equal(t, role, payload.Role)
 
 	require.WithinDuration(t, issuedAt, payload.IssuedAt, time.Second)
 	require.WithinDuration(t, expiredAt, payload.ExpiredAt, time.Second)
@@ -38,8 +40,9 @@ func TestExpiredPasetoTokenMaker(t *testing.T) {
 	require.NoError(t, err)
 
 	username := util.RandomOwner()
+	role := util.DepositorRole
 
-	token, payload, err := maker.CreateToken(username, -time.Minute)
+	token, payload, err := maker.CreateToken(username, role, -time.Minute)
 	require.NoError(t, err)
 	require.NotEmpty(t, token) 
 	require.NotEmpty(t, payload)
