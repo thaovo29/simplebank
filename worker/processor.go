@@ -16,6 +16,7 @@ const (
 
 type TaskProcessor interface {
 	Start() error
+	Shutdown()
 	ProcessTaskSendVerifynEmail(ctx context.Context, task *asynq.Task) error
 }
 
@@ -51,4 +52,8 @@ func (processor *RedisTaskProccessor) Start() error {
 	mux := asynq.NewServeMux()
 	mux.HandleFunc(TaskSendVerifynEmail, processor.ProcessTaskSendVerifynEmail)
 	return processor.server.Start(mux)
+}
+
+func (processor *RedisTaskProccessor) Shutdown() {
+	processor.server.Shutdown()
 }
